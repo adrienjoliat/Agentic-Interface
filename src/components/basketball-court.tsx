@@ -31,12 +31,7 @@ const ACTION_LABELS: Record<PlayerId, string> = {
   lebron: "Power dunk",
 };
 
-const PHASE_OFFSET: Record<PlayerId, number> = {
-  curry: 0,
-  jordan: 1,
-  kobe: 2,
-  lebron: 3,
-};
+const FRAME_DURATIONS = [260, 260, 260, 900];
 
 function Hoop({ side }: { side: "left" | "right" }) {
   return (
@@ -69,63 +64,57 @@ function CourtLines() {
       preserveAspectRatio="none"
       aria-hidden="true"
     >
-      {/* outer boundary */}
-      <rect x="12" y="12" width="976" height="236" className="line-main" />
+      {/* Outer boundary */}
+      <rect x="18" y="10" width="964" height="240" className="line-main" />
 
-      {/* center line + circle */}
-      <line x1="500" y1="12" x2="500" y2="248" className="line-main" />
-      <circle cx="500" cy="130" r="38" className="line-main" />
+      {/* Center line + center circle */}
+      <line x1="500" y1="10" x2="500" y2="250" className="line-main" />
+      <circle cx="500" cy="130" r="34" className="line-main" />
 
-      {/* left paint */}
-      <rect x="110" y="68" width="145" height="124" className="line-main" />
-      <circle cx="255" cy="130" r="38" className="line-main" />
-      <path d="M255 92 A38 38 0 0 1 255 168" className="line-main line-soft" />
-      <path d="M110 102 A22 22 0 0 0 110 158" className="line-main" />
+      {/* Left paint */}
+      <rect x="115" y="66" width="145" height="128" className="line-main" />
+      <circle cx="260" cy="130" r="34" className="line-main" />
+      <path d="M260 96 A34 34 0 0 1 260 164" className="line-main line-soft" />
 
-      {/* left 3pt */}
-      <path d="M72 214 A165 165 0 0 1 72 46" className="line-main" />
-      <line x1="12" y1="58" x2="72" y2="58" className="line-main" />
-      <line x1="12" y1="202" x2="72" y2="202" className="line-main" />
+      {/* Left restricted area */}
+      <path d="M95 104 A26 26 0 0 1 95 156" className="line-main" />
 
-      {/* right paint */}
-      <rect x="745" y="68" width="145" height="124" className="line-main" />
-      <circle cx="745" cy="130" r="38" className="line-main" />
-      <path d="M745 92 A38 38 0 0 0 745 168" className="line-main line-soft" />
-      <path d="M890 102 A22 22 0 0 1 890 158" className="line-main" />
+      {/* Left 3-point line */}
+      <line x1="18" y1="58" x2="78" y2="58" className="line-main" />
+      <line x1="18" y1="202" x2="78" y2="202" className="line-main" />
+      <path d="M78 202 A150 150 0 0 1 78 58" className="line-main" />
 
-      {/* right 3pt */}
-      <path d="M928 46 A165 165 0 0 1 928 214" className="line-main" />
-      <line x1="928" y1="58" x2="988" y2="58" className="line-main" />
-      <line x1="928" y1="202" x2="988" y2="202" className="line-main" />
+      {/* Right paint */}
+      <rect x="740" y="66" width="145" height="128" className="line-main" />
+      <circle cx="740" cy="130" r="34" className="line-main" />
+      <path d="M740 96 A34 34 0 0 0 740 164" className="line-main line-soft" />
+
+      {/* Right restricted area */}
+      <path d="M905 104 A26 26 0 0 0 905 156" className="line-main" />
+
+      {/* Right 3-point line */}
+      <line x1="922" y1="58" x2="982" y2="58" className="line-main" />
+      <line x1="922" y1="202" x2="982" y2="202" className="line-main" />
+      <path d="M922 58 A150 150 0 0 1 922 202" className="line-main" />
     </svg>
   );
 }
 
 function CourtPlayer({
   agent,
-  tick,
+  phase,
 }: {
   agent: CourtAgent;
-  tick: number;
+  phase: number;
 }) {
-  const phase = agent.active ? (tick + PHASE_OFFSET[agent.player]) % 4 : 0;
   const spriteSrc = agent.active
     ? agent.frames.active[phase]
     : agent.frames.bench;
 
-  const showHeldBall =
-    agent.active &&
-    (
-      agent.player === "jordan" ||
-      agent.player === "lebron" ||
-      (agent.player === "curry" && phase !== 3) ||
-      (agent.player === "kobe" && phase !== 3)
-    );
-
   const showFlightBall =
     agent.active &&
-    (agent.player === "curry" || agent.player === "kobe") &&
-    phase === 3;
+    phase === 3 &&
+    (agent.player === "curry" || agent.player === "kobe");
 
   const style = {
     ["--player-scale" as string]: String(agent.heightCm / 188),
@@ -154,10 +143,6 @@ function CourtPlayer({
           draggable={false}
         />
 
-        {showHeldBall && (
-          <span className={`held-ball held-${agent.player} phase-${phase}`} />
-        )}
-
         {showFlightBall && (
           <span className={`flight-ball flight-${agent.player}`} />
         )}
@@ -169,14 +154,27 @@ function CourtPlayer({
 }
 
 export function BasketballCourt({ agents }: { agents: CourtAgent[] }) {
-  const [tick, setTick] = useState(0);
+  const [phase, setPhase] = useState(0);
 
   useEffect(() => {
-    const id = window.setInterval(() => {
-      setTick((t) => (t + 1) % 4);
-    }, 180);
+    let cancelled = false;
+    let timeoutId: number;
 
-    return () => window.clearInterval(id);
+    const run = (currentPhase: number) => {
+      timeoutId = window.setTimeout(() => {
+        if (cancelled) return;
+        const next = (currentPhase + 1) % 4;
+        setPhase(next);
+        run(next);
+      }, FRAME_DURATIONS[currentPhase]);
+    };
+
+    run(0);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeoutId);
+    };
   }, []);
 
   const activeCount = useMemo(
@@ -222,7 +220,7 @@ export function BasketballCourt({ agents }: { agents: CourtAgent[] }) {
           </div>
 
           {agents.map((agent) => (
-            <CourtPlayer key={agent.player} agent={agent} tick={tick} />
+            <CourtPlayer key={agent.player} agent={agent} phase={phase} />
           ))}
         </div>
       </div>
@@ -234,7 +232,9 @@ export function BasketballCourt({ agents }: { agents: CourtAgent[] }) {
             className={`court-agent-card ${agent.active ? "agent-active" : "agent-inactive"}`}
           >
             <div className="court-agent-top">
-              <div className={`jersey-chip jersey-${agent.player}`}>{agent.number}</div>
+              <div className={`jersey-chip jersey-${agent.player}`}>
+                {agent.number}
+              </div>
 
               <div className="court-agent-meta">
                 <strong>{agent.name}</strong>
@@ -246,7 +246,11 @@ export function BasketballCourt({ agents }: { agents: CourtAgent[] }) {
 
             <div className="court-agent-action">
               <span>{agent.active ? "NOW PLAYING" : "STATUS"}</span>
-              <strong>{agent.active ? ACTION_LABELS[agent.player] : "Waiting on bench"}</strong>
+              <strong>
+                {agent.active
+                  ? ACTION_LABELS[agent.player]
+                  : "Waiting on bench"}
+              </strong>
             </div>
 
             <div className="court-agent-info">

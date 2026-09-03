@@ -33,7 +33,7 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 @media (max-width:820px) { .app-shell { display:block; }.sidebar { position:relative; width:100%; height:auto; padding:8px 12px; flex-direction:row; align-items:center; border-right:0; border-bottom:1px solid var(--line); }.brand-row,.roster-state,.sidebar-bottom,.main-nav p { display:none; }.main-nav { display:flex; width:100%; overflow-x:auto; }.main-nav a { flex:1; min-width:90px; justify-content:center; }.main-nav a.active { box-shadow:inset 0 -3px var(--blue); }.main-nav a.active i { display:none; }.topbar { position:relative; height:50px; padding:0 18px; }.mobile-brand { display:flex; }.command-key { display:none; }.content { padding:25px 18px 40px; }.stats-grid { grid-template-columns:repeat(2,1fr); }.dashboard-grid { display:block; }.dashboard-grid>.panel { margin-bottom:12px; }.agent-row { grid-template-columns:48px 1fr auto; }.agent-task,.agent-load { display:none; }.roster-grid { grid-template-columns:repeat(2,1fr); }.system-state { display:none; } }
 @media (max-width:560px) { .page-header { align-items:flex-start; }.page-header .primary-button { position:fixed; z-index:30; right:17px; bottom:17px; }.stats-grid,.roster-grid { grid-template-columns:1fr; }.table-head { display:none; }.table-row { grid-template-columns:1fr auto; padding:9px 0; }.table-row>span,.table-progress { display:none; }.log-row { grid-template-columns:56px 8px 1fr auto; }.log-row p,.log-row>button { display:none; }.main-nav a { font-size:0; min-width:56px; }.nav-icon { font-size:13px; }.top-actions button:first-child { display:none; } }
 /* =========================================================
-   AGENT BASKETBALL COURT — V3
+   AGENT BASKETBALL COURT — V4
    ========================================================= */
 
 .court-panel {
@@ -98,7 +98,7 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 
 .basketball-court {
   position: relative;
-  min-width: 1100px;
+  min-width: 1180px;
   height: 560px;
   overflow: hidden;
   background:
@@ -162,31 +162,33 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 }
 
 .line-1 {
-  top: 202px;
+  top: 200px;
 }
 
 .line-2 {
   top: 304px;
 }
 
-/* benches farther away */
+/* =========================================================
+   BENCHES
+   ========================================================= */
 
 .court-bench {
   position: absolute;
   z-index: 2;
-  top: 232px;
-  width: 180px;
+  top: 92px;
+  width: 170px;
   height: 52px;
-  transform: scale(0.8);
-  opacity: 0.75;
+  transform: scale(0.9);
+  opacity: 0.9;
 }
 
 .bench-left {
-  left: 22%;
+  left: 21%;
 }
 
 .bench-right {
-  right: 22%;
+  right: 21%;
 }
 
 .bench-back {
@@ -225,29 +227,31 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
   right: 30px;
 }
 
-/* hoops closer to paint */
+/* =========================================================
+   HOOPS
+   ========================================================= */
 
 .court-hoop {
   position: absolute;
   z-index: 7;
-  top: 214px;
-  width: 130px;
-  height: 120px;
+  top: 76px;
+  width: 132px;
+  height: 270px;
 }
 
 .hoop-left {
-  left: 62px;
+  left: 26px;
 }
 
 .hoop-right {
-  right: 62px;
+  right: 26px;
 }
 
 .hoop-post {
   position: absolute;
   bottom: 0;
   width: 8px;
-  height: 98px;
+  height: 230px;
   background: #162150;
 }
 
@@ -261,7 +265,7 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 
 .hoop-arm {
   position: absolute;
-  top: 48px;
+  top: 52px;
   width: 44px;
   height: 8px;
   background: #162150;
@@ -277,7 +281,7 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 
 .hoop-backboard {
   position: absolute;
-  top: 24px;
+  top: 26px;
   width: 12px;
   height: 64px;
   background: rgba(255,255,255,.94);
@@ -294,7 +298,7 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 
 .hoop-rim {
   position: absolute;
-  top: 76px;
+  top: 78px;
   width: 42px;
   height: 6px;
   border-radius: 4px;
@@ -312,7 +316,7 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 
 .hoop-net {
   position: absolute;
-  top: 82px;
+  top: 84px;
   width: 28px;
   height: 26px;
   border-left: 2px solid rgba(120,120,130,.7);
@@ -336,16 +340,18 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
   right: 69px;
 }
 
-/* court */
+/* =========================================================
+   COURT FLOOR
+   ========================================================= */
 
 .court-surface {
   position: absolute;
   z-index: 3;
-  left: 7%;
-  right: 7%;
-  bottom: 18px;
-  height: 228px;
-  clip-path: polygon(6% 0, 94% 0, 100% 100%, 0 100%);
+  left: 4%;
+  right: 4%;
+  bottom: 16px;
+  height: 250px;
+  clip-path: polygon(4% 0, 96% 0, 100% 100%, 0 100%);
   background:
     repeating-linear-gradient(
       90deg,
@@ -364,7 +370,7 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 .surface-logo {
   position: absolute;
   left: 50%;
-  top: 103px;
+  top: 109px;
   transform: translateX(-50%);
   color: rgba(255,255,255,.9);
   font: 800 16px var(--font-geist-mono);
@@ -381,16 +387,18 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 
 .court-lines .line-main {
   fill: none;
-  stroke: rgba(255,255,255,.86);
+  stroke: rgba(255,255,255,.9);
   stroke-width: 3;
   vector-effect: non-scaling-stroke;
 }
 
 .court-lines .line-soft {
-  opacity: 0.65;
+  opacity: 0.6;
 }
 
-/* players */
+/* =========================================================
+   PLAYERS
+   ========================================================= */
 
 .court-player {
   position: absolute;
@@ -468,11 +476,13 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
   color: #8d92a0;
 }
 
-/* active bases */
+/* =========================================================
+   ACTIVE POSITIONS
+   ========================================================= */
 
 .is-active.player-curry {
-  left: 21%;
-  bottom: 130px;
+  left: 19%;
+  bottom: 132px;
 }
 
 .is-active.player-jordan {
@@ -486,52 +496,57 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 }
 
 .is-active.player-lebron {
-  left: 68%;
+  left: 71%;
   bottom: 132px;
 }
 
-/* frame-driven motion */
-
+/* small motion offsets driven by frame */
 .player-curry.phase-0 { transform: translate(0, 0); }
-.player-curry.phase-1 { transform: translate(4px, -4px); }
-.player-curry.phase-2 { transform: translate(8px, -18px); }
+.player-curry.phase-1 { transform: translate(4px, -2px); }
+.player-curry.phase-2 { transform: translate(8px, -14px); }
 .player-curry.phase-3 { transform: translate(8px, -6px); }
 
 .player-jordan.phase-0 { left: 31%; bottom: 132px; }
 .player-jordan.phase-1 { left: 27%; bottom: 132px; }
 .player-jordan.phase-2 { left: 21%; bottom: 136px; }
-.player-jordan.phase-3 { left: 13%; bottom: 178px; }
+.player-jordan.phase-3 { left: 13%; bottom: 180px; }
 
 .player-kobe.phase-0 { transform: translate(0, 0); }
-.player-kobe.phase-1 { transform: translate(-4px, -4px); }
-.player-kobe.phase-2 { transform: translate(-8px, -18px); }
+.player-kobe.phase-1 { transform: translate(-4px, -2px); }
+.player-kobe.phase-2 { transform: translate(-8px, -14px); }
 .player-kobe.phase-3 { transform: translate(-6px, -6px); }
 
-.player-lebron.phase-0 { left: 68%; bottom: 132px; }
-.player-lebron.phase-1 { left: 73%; bottom: 132px; }
-.player-lebron.phase-2 { left: 80%; bottom: 136px; }
-.player-lebron.phase-3 { left: 86%; bottom: 182px; }
+.player-lebron.phase-0 { left: 71%; bottom: 132px; }
+.player-lebron.phase-1 { left: 75%; bottom: 132px; }
+.player-lebron.phase-2 { left: 81%; bottom: 136px; }
+.player-lebron.phase-3 { left: 87%; bottom: 184px; }
 
-/* inactive */
+/* =========================================================
+   BENCH PLAYERS
+   ========================================================= */
+
+.is-inactive {
+  z-index: 4;
+}
 
 .is-inactive.player-curry {
-  left: 24%;
-  top: 198px;
+  left: 18.5%;
+  top: 74px;
 }
 
 .is-inactive.player-jordan {
-  left: 31%;
-  top: 198px;
+  left: 26%;
+  top: 74px;
 }
 
 .is-inactive.player-kobe {
-  left: 59%;
-  top: 198px;
+  left: 66%;
+  top: 74px;
 }
 
 .is-inactive.player-lebron {
-  left: 66%;
-  top: 198px;
+  left: 73.5%;
+  top: 74px;
 }
 
 .is-inactive .player-figure {
@@ -540,14 +555,16 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 
 .is-inactive .player-shadow {
   width: 42px;
-  opacity: 0.1;
+  opacity: 0.08;
 }
 
-/* balls */
+/* =========================================================
+   FLIGHT BALLS — shooters only
+   ========================================================= */
 
-.held-ball,
 .flight-ball {
   position: absolute;
+  z-index: 20;
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -564,7 +581,6 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
   box-shadow: 1px 2px 0 rgba(69,31,8,.25);
 }
 
-.held-ball::after,
 .flight-ball::after {
   content: "";
   position: absolute;
@@ -576,51 +592,31 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
   transform: rotate(-20deg);
 }
 
-.held-curry.phase-0 { left: 58px; top: 46px; }
-.held-curry.phase-1 { left: 60px; top: 38px; }
-.held-curry.phase-2 { left: 63px; top: 28px; }
-
-.held-kobe.phase-0 { left: 19px; top: 46px; }
-.held-kobe.phase-1 { left: 15px; top: 38px; }
-.held-kobe.phase-2 { left: 10px; top: 28px; }
-
-.held-jordan.phase-0 { left: 54px; top: 76px; }
-.held-jordan.phase-1 { left: 50px; top: 86px; }
-.held-jordan.phase-2 { left: 52px; top: 48px; }
-.held-jordan.phase-3 { left: 56px; top: 22px; }
-
-.held-lebron.phase-0 { left: 54px; top: 76px; }
-.held-lebron.phase-1 { left: 56px; top: 66px; }
-.held-lebron.phase-2 { left: 58px; top: 44px; }
-.held-lebron.phase-3 { left: 60px; top: 18px; }
-
-.flight-ball {
-  z-index: 20;
-}
-
 .flight-curry {
-  animation: curry-flight 720ms linear;
+  animation: curry-flight 900ms linear forwards;
 }
 
 .flight-kobe {
-  animation: kobe-flight 720ms linear;
+  animation: kobe-flight 900ms linear forwards;
 }
 
 @keyframes curry-flight {
-  0%   { left: 29%; bottom: 270px; opacity: 1; }
-  40%  { left: 22%; bottom: 338px; opacity: 1; }
-  75%  { left: 15.2%; bottom: 308px; opacity: 1; }
-  100% { left: 12.5%; bottom: 288px; opacity: 0; }
+  0%   { left: 23.5%; bottom: 282px; opacity: 1; }
+  40%  { left: 16%; bottom: 355px; opacity: 1; }
+  75%  { left: 9.2%; bottom: 318px; opacity: 1; }
+  100% { left: 7.6%; bottom: 284px; opacity: 0; }
 }
 
 @keyframes kobe-flight {
-  0%   { left: 67%; bottom: 270px; opacity: 1; }
-  40%  { left: 75%; bottom: 338px; opacity: 1; }
-  75%  { left: 82.6%; bottom: 308px; opacity: 1; }
-  100% { left: 85.8%; bottom: 288px; opacity: 0; }
+  0%   { left: 65.5%; bottom: 282px; opacity: 1; }
+  40%  { left: 76%; bottom: 355px; opacity: 1; }
+  75%  { left: 88.2%; bottom: 318px; opacity: 1; }
+  100% { left: 92.1%; bottom: 284px; opacity: 0; }
 }
 
-/* agent strip */
+/* =========================================================
+   AGENT STRIP
+   ========================================================= */
 
 .court-agent-strip {
   display: grid;
