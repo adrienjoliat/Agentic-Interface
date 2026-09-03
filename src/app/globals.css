@@ -195,7 +195,7 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
    */
   position: absolute;
   z-index: 8;
-  top: 47px;
+  top: 87px;
   width: 132px;
   height: 385px;
 }
@@ -476,7 +476,7 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
  */
 
 .is-active.player-curry {
-  left: 19%;
+  left: 35%;
   bottom: 132px;
 }
 
@@ -485,15 +485,15 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 }
 
 .player-curry.phase-1 {
-  transform: translate(-5px, -2px);
+  transform: translate(-50px, -2px);
 }
 
 .player-curry.phase-2 {
-  transform: translate(-9px, -16px);
+  transform: translate(-59px, -16px);
 }
 
 .player-curry.phase-3 {
-  transform: translate(-9px, -8px);
+  transform: translate(-59px, -8px);
 }
 
 
@@ -518,13 +518,13 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
  * tune ONLY left/bottom here.
  */
 .player-jordan.phase-3 {
-  left: 5.8%;
-  bottom: 226px;
+  left: 6.9%;
+  bottom: 276px;
 }
 
 
 .is-active.player-kobe {
-  left: 58%;
+  left: 75%;
   bottom: 132px;
 }
 
@@ -533,11 +533,11 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 }
 
 .player-kobe.phase-1 {
-  transform: translate(4px, -2px);
+  transform: translate(-40px, -2px);
 }
 
 .player-kobe.phase-2 {
-  transform: translate(8px, -16px);
+  transform: translate(-10px, -16px);
 }
 
 .player-kobe.phase-3 {
@@ -546,18 +546,18 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 
 
 .player-lebron.phase-0 {
-  left: 71%;
+  left: 70%;
   bottom: 132px;
 }
 
 .player-lebron.phase-1 {
-  left: 77%;
+  left: 74%;
   bottom: 138px;
 }
 
 .player-lebron.phase-2 {
-  left: 83%;
-  bottom: 164px;
+  left: 78%;
+  bottom: 194px;
 }
 
 /*
@@ -565,7 +565,7 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
  */
 .player-lebron.phase-3 {
   left: 82.4%;
-  bottom: 228px;
+  bottom: 268px;
 }
 
 /* =========================================================
@@ -579,7 +579,7 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 
 .is-inactive {
   z-index: 5;
-  bottom: 318px;
+  bottom: 218px;
 }
 
 .is-inactive.player-curry {

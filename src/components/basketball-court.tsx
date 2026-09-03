@@ -78,12 +78,9 @@ function CourtLines() {
       preserveAspectRatio="none"
       aria-hidden="true"
     >
-      {/*
-        The court itself is shown with perspective, so the outer line follows
-        the same trapezoid instead of using a rectangular border.
-      */}
+      {/* Outer trapezoid line follows the floor edge */}
       <path
-        d="M 34 10 H 966 L 994 250 H 6 Z"
+        d="M 8 10 H 992 L 1000 250 H 0 Z"
         className="line-main"
       />
 
@@ -91,88 +88,66 @@ function CourtLines() {
       <line x1="500" y1="10" x2="500" y2="250" className="line-main" />
       <ellipse cx="500" cy="130" rx="36" ry="38" className="line-main" />
 
-      {/* =========================================================
-          LEFT HALF
-          Baseline is at x ≈ 34.
-          Paint starts at the baseline and extends toward center.
-          ========================================================= */}
-
-      {/* Paint / key */}
+      {/* LEFT key */}
       <path
         d="
-          M 34 84
+          M 8 84
           H 208
           V 176
-          H 34
+          H 8
         "
         className="line-main"
       />
 
-      {/* Free-throw semicircle: court-facing half only */}
+      {/* LEFT free throw semicircle */}
       <path
         d="
           M 208 84
-          C 264 84,
-            264 176,
-            208 176
+          C 264 84, 264 176, 208 176
         "
         className="line-main"
       />
 
-      {/* Three-point line: straight corners + one continuous arc */}
+      {/* LEFT 3-point line all the way to the side edge */}
       <path
         d="
-          M 34 34
+          M 8 34
           H 145
-          C 222 48,
-            270 82,
-            270 130
-          C 270 178,
-            222 212,
-            145 226
-          H 34
+          C 222 48, 270 82, 270 130
+          C 270 178, 222 212, 145 226
+          H 8
         "
         className="line-main"
       />
 
-      {/* =========================================================
-          RIGHT HALF
-          ========================================================= */}
-
-      {/* Paint / key */}
+      {/* RIGHT key */}
       <path
         d="
-          M 966 84
+          M 992 84
           H 792
           V 176
-          H 966
+          H 992
         "
         className="line-main"
       />
 
-      {/* Free-throw semicircle */}
+      {/* RIGHT free throw semicircle */}
       <path
         d="
           M 792 84
-          C 736 84,
-            736 176,
-            792 176
+          C 736 84, 736 176, 792 176
         "
         className="line-main"
       />
 
-      {/* Three-point line */}
+      {/* RIGHT 3-point line all the way to the side edge */}
       <path
         d="
-          M 966 34
+          M 992 34
           H 855
-          C 778 48,
-            730 82,
-            730 130
-          C 730 178,
-            778 212,
-            855 226
-          H 966
+          C 778 48, 730 82, 730 130
+          C 730 178, 778 212, 855 226
+          H 992
         "
         className="line-main"
       />
