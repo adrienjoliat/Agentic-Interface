@@ -1,0 +1,7 @@
+import type { ReactNode } from "react";
+
+export function PageHeader({ eyebrow, title, description, action }: { eyebrow: string; title: string; description: string; action?: string }) { return <header className="page-header"><div><p className="kicker">{eyebrow}</p><h1>{title}</h1><p>{description}</p></div>{action && <button className="primary-button"><span>▣</span>{action}</button>}</header>; }
+export function Badge({ children, tone = "gray" }: { children: ReactNode; tone?: "green" | "blue" | "gray" }) { return <span className={`badge badge-${tone}`}>{children}</span>; }
+export function ProgressBar({ value }: { value: number }) { return <div className="progress-track" aria-label={`${value}% complete`}><div style={{ width: `${value}%` }}>{Array.from({ length: Math.max(1, Math.round(value / 16)) }).map((_, i) => <i key={i} />)}</div></div>; }
+export function AgentAvatar({ player, status = "online", size = "normal" }: { player: "curry" | "jordan" | "kobe" | "lebron"; status?: string; size?: "normal" | "large" }) { return <div className={`agent-avatar avatar-${player} avatar-${size}`}><span className={`avatar-status status-${status}`} /></div>; }
+export function StatCard({ label, value, delta, icon }: { label: string; value: string; delta: string; icon: string }) { return <article className="stat-card"><div className="stat-top"><span>{label}</span><i>{icon}</i></div><strong>{value}</strong><p>{delta}</p></article>; }
