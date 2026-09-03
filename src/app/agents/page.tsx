@@ -74,7 +74,7 @@ const roster: CourtAgent[] = [
     model: "GPT-5.6 Sol",
     load: 64,
     missions: 5,
-    active: false,
+    active: true,
     heightCm: 206,
     frames: {
       active: [

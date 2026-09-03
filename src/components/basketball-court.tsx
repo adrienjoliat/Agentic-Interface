@@ -32,21 +32,14 @@ const ACTION_LABELS: Record<PlayerId, string> = {
 };
 
 /*
- * Animation schedule in milliseconds.
- *
- * Change ONLY these four values when you want to tune the rhythm:
- *   frame1: dribble / setup
- *   frame2: gather / drive
- *   frame3: jump / takeoff
- *   frame4: release / dunk / follow-through
- *
- * The shooter flight animation automatically uses almost all of frame 4.
+ * Main timing control.
+ * This is the ONLY place to change frame rhythm.
  */
 const FRAME_DURATIONS_MS = {
-  frame1: 12000,
-  frame2: 12000,
-  frame3: 12000,
-  frame4: 220,
+  frame1: 300,
+  frame2: 300,
+  frame3: 400,
+  frame4: 800,
 } as const;
 
 const FRAME_DURATIONS = [
@@ -56,8 +49,10 @@ const FRAME_DURATIONS = [
   FRAME_DURATIONS_MS.frame4,
 ] as const;
 
-const SHOT_DURATION_MS = Math.max(500, FRAME_DURATIONS_MS.frame4 - 180);
-
+const SHOT_DURATION_MS = Math.max(
+  300,
+  FRAME_DURATIONS_MS.frame4 - 60
+);
 function Hoop({ side }: { side: "left" | "right" }) {
   return (
     <div className={`court-hoop hoop-${side}`} aria-hidden="true">
@@ -70,6 +65,24 @@ function Hoop({ side }: { side: "left" | "right" }) {
   );
 }
 
+function ArenaCrowd() {
+  return (
+    <div className="arena-crowd" aria-hidden="true">
+      <div className="crowd-tier tier-back" />
+      <div className="crowd-tier tier-mid" />
+      <div className="crowd-tier tier-front" />
+      <div className="crowd-row crowd-row-1" />
+      <div className="crowd-row crowd-row-2" />
+      <div className="crowd-row crowd-row-3" />
+      <div className="crowd-row crowd-row-4" />
+      <div className="tribune-rail rail-1" />
+      <div className="tribune-rail rail-2" />
+      <div className="tribune-rail rail-3" />
+      <div className="arena-vignette" />
+    </div>
+  );
+}
+
 function CourtLines() {
   return (
     <svg
@@ -78,76 +91,122 @@ function CourtLines() {
       preserveAspectRatio="none"
       aria-hidden="true"
     >
-      {/* Outer trapezoid line follows the floor edge */}
+      {/* =====================================================
+          OUTER BOUNDARY
+
+          The white line is deliberately INSIDE the wooden
+          trapezoid so the stroke cannot be clipped.
+          ===================================================== */}
+
       <path
-        d="M 8 10 H 992 L 1000 250 H 0 Z"
+        d="
+          M 42 10
+          H 958
+          L 992 250
+          H 8
+          Z
+        "
+        className="line-main court-boundary"
+      />
+
+      {/* CENTER */}
+
+      <line
+        x1="500"
+        y1="10"
+        x2="500"
+        y2="250"
         className="line-main"
       />
 
-      {/* Center line + center circle */}
-      <line x1="500" y1="10" x2="500" y2="250" className="line-main" />
-      <ellipse cx="500" cy="130" rx="36" ry="38" className="line-main" />
+      <ellipse
+        cx="500"
+        cy="130"
+        rx="36"
+        ry="38"
+        className="line-main"
+      />
 
-      {/* LEFT key */}
+      {/* =====================================================
+          LEFT
+          ===================================================== */}
+
+      {/* Key meets the slanted baseline */}
       <path
         d="
-          M 8 84
+          M 32 84
           H 208
           V 176
-          H 8
+          H 18
         "
         className="line-main"
       />
 
-      {/* LEFT free throw semicircle */}
+      {/* Free-throw semicircle */}
       <path
         d="
           M 208 84
-          C 264 84, 264 176, 208 176
+          C 264 84,
+            264 176,
+            208 176
         "
         className="line-main"
       />
 
-      {/* LEFT 3-point line all the way to the side edge */}
+      {/* 3-point line meets baseline */}
       <path
         d="
-          M 8 34
+          M 39 34
           H 145
-          C 222 48, 270 82, 270 130
-          C 270 178, 222 212, 145 226
-          H 8
+          C 222 48,
+            270 82,
+            270 130
+          C 270 178,
+            222 212,
+            145 226
+          H 11
         "
         className="line-main"
       />
 
-      {/* RIGHT key */}
+      {/* =====================================================
+          RIGHT
+          ===================================================== */}
+
+      {/* Key meets baseline */}
       <path
         d="
-          M 992 84
+          M 968 84
           H 792
           V 176
-          H 992
+          H 982
         "
         className="line-main"
       />
 
-      {/* RIGHT free throw semicircle */}
+      {/* Free-throw semicircle */}
       <path
         d="
           M 792 84
-          C 736 84, 736 176, 792 176
+          C 736 84,
+            736 176,
+            792 176
         "
         className="line-main"
       />
 
-      {/* RIGHT 3-point line all the way to the side edge */}
+      {/* 3-point line meets baseline */}
       <path
         d="
-          M 992 34
+          M 961 34
           H 855
-          C 778 48, 730 82, 730 130
-          C 730 178, 778 212, 855 226
-          H 992
+          C 778 48,
+            730 82,
+            730 130
+          C 730 178,
+            778 212,
+            855 226
+          H 989
         "
         className="line-main"
       />
@@ -272,6 +331,8 @@ export function BasketballCourt({ agents }: { agents: CourtAgent[] }) {
 
       <div className="court-scroll">
         <div className="basketball-court">
+          <ArenaCrowd />
+
           <div className="arena-scoreboard">
             <span>AGENT ARENA</span>
             <strong>{String(activeCount).padStart(2, "0")}</strong>
@@ -285,7 +346,6 @@ export function BasketballCourt({ agents }: { agents: CourtAgent[] }) {
           <Hoop side="right" />
 
           <div className="court-surface" aria-hidden="true">
-            <span className="surface-logo">AI</span>
             <CourtLines />
           </div>
 
