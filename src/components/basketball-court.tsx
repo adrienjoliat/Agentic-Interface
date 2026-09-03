@@ -31,7 +31,32 @@ const ACTION_LABELS: Record<PlayerId, string> = {
   lebron: "Power dunk",
 };
 
-const FRAME_DURATIONS = [260, 260, 260, 900];
+/*
+ * Animation schedule in milliseconds.
+ *
+ * Change ONLY these four values when you want to tune the rhythm:
+ *   frame1: dribble / setup
+ *   frame2: gather / drive
+ *   frame3: jump / takeoff
+ *   frame4: release / dunk / follow-through
+ *
+ * The shooter flight animation automatically uses almost all of frame 4.
+ */
+const FRAME_DURATIONS_MS = {
+  frame1: 12000,
+  frame2: 12000,
+  frame3: 12000,
+  frame4: 220,
+} as const;
+
+const FRAME_DURATIONS = [
+  FRAME_DURATIONS_MS.frame1,
+  FRAME_DURATIONS_MS.frame2,
+  FRAME_DURATIONS_MS.frame3,
+  FRAME_DURATIONS_MS.frame4,
+] as const;
+
+const SHOT_DURATION_MS = Math.max(500, FRAME_DURATIONS_MS.frame4 - 180);
 
 function Hoop({ side }: { side: "left" | "right" }) {
   return (
@@ -45,17 +70,6 @@ function Hoop({ side }: { side: "left" | "right" }) {
   );
 }
 
-function Bench({ side }: { side: "left" | "right" }) {
-  return (
-    <div className={`court-bench bench-${side}`} aria-hidden="true">
-      <span className="bench-back" />
-      <span className="bench-seat" />
-      <span className="bench-leg leg-1" />
-      <span className="bench-leg leg-2" />
-    </div>
-  );
-}
-
 function CourtLines() {
   return (
     <svg
@@ -64,38 +78,104 @@ function CourtLines() {
       preserveAspectRatio="none"
       aria-hidden="true"
     >
-      {/* Outer boundary */}
-      <rect x="18" y="10" width="964" height="240" className="line-main" />
+      {/*
+        The court itself is shown with perspective, so the outer line follows
+        the same trapezoid instead of using a rectangular border.
+      */}
+      <path
+        d="M 34 10 H 966 L 994 250 H 6 Z"
+        className="line-main"
+      />
 
       {/* Center line + center circle */}
       <line x1="500" y1="10" x2="500" y2="250" className="line-main" />
-      <circle cx="500" cy="130" r="34" className="line-main" />
+      <ellipse cx="500" cy="130" rx="36" ry="38" className="line-main" />
 
-      {/* Left paint */}
-      <rect x="115" y="66" width="145" height="128" className="line-main" />
-      <circle cx="260" cy="130" r="34" className="line-main" />
-      <path d="M260 96 A34 34 0 0 1 260 164" className="line-main line-soft" />
+      {/* =========================================================
+          LEFT HALF
+          Baseline is at x ≈ 34.
+          Paint starts at the baseline and extends toward center.
+          ========================================================= */}
 
-      {/* Left restricted area */}
-      <path d="M95 104 A26 26 0 0 1 95 156" className="line-main" />
+      {/* Paint / key */}
+      <path
+        d="
+          M 34 84
+          H 208
+          V 176
+          H 34
+        "
+        className="line-main"
+      />
 
-      {/* Left 3-point line */}
-      <line x1="18" y1="58" x2="78" y2="58" className="line-main" />
-      <line x1="18" y1="202" x2="78" y2="202" className="line-main" />
-      <path d="M78 202 A150 150 0 0 1 78 58" className="line-main" />
+      {/* Free-throw semicircle: court-facing half only */}
+      <path
+        d="
+          M 208 84
+          C 264 84,
+            264 176,
+            208 176
+        "
+        className="line-main"
+      />
 
-      {/* Right paint */}
-      <rect x="740" y="66" width="145" height="128" className="line-main" />
-      <circle cx="740" cy="130" r="34" className="line-main" />
-      <path d="M740 96 A34 34 0 0 0 740 164" className="line-main line-soft" />
+      {/* Three-point line: straight corners + one continuous arc */}
+      <path
+        d="
+          M 34 34
+          H 145
+          C 222 48,
+            270 82,
+            270 130
+          C 270 178,
+            222 212,
+            145 226
+          H 34
+        "
+        className="line-main"
+      />
 
-      {/* Right restricted area */}
-      <path d="M905 104 A26 26 0 0 0 905 156" className="line-main" />
+      {/* =========================================================
+          RIGHT HALF
+          ========================================================= */}
 
-      {/* Right 3-point line */}
-      <line x1="922" y1="58" x2="982" y2="58" className="line-main" />
-      <line x1="922" y1="202" x2="982" y2="202" className="line-main" />
-      <path d="M922 58 A150 150 0 0 1 922 202" className="line-main" />
+      {/* Paint / key */}
+      <path
+        d="
+          M 966 84
+          H 792
+          V 176
+          H 966
+        "
+        className="line-main"
+      />
+
+      {/* Free-throw semicircle */}
+      <path
+        d="
+          M 792 84
+          C 736 84,
+            736 176,
+            792 176
+        "
+        className="line-main"
+      />
+
+      {/* Three-point line */}
+      <path
+        d="
+          M 966 34
+          H 855
+          C 778 48,
+            730 82,
+            730 130
+          C 730 178,
+            778 212,
+            855 226
+          H 966
+        "
+        className="line-main"
+      />
     </svg>
   );
 }
@@ -107,14 +187,11 @@ function CourtPlayer({
   agent: CourtAgent;
   phase: number;
 }) {
-  const spriteSrc = agent.active
-    ? agent.frames.active[phase]
-    : agent.frames.bench;
+  const playerPhase = agent.active ? phase : 0;
 
-  const showFlightBall =
-    agent.active &&
-    phase === 3 &&
-    (agent.player === "curry" || agent.player === "kobe");
+  const spriteSrc = agent.active
+    ? agent.frames.active[playerPhase]
+    : agent.frames.bench;
 
   const style = {
     ["--player-scale" as string]: String(agent.heightCm / 188),
@@ -126,7 +203,7 @@ function CourtPlayer({
         "court-player",
         `player-${agent.player}`,
         agent.active ? "is-active" : "is-inactive",
-        `phase-${phase}`,
+        `phase-${playerPhase}`,
       ].join(" ")}
       style={style}
     >
@@ -143,13 +220,23 @@ function CourtPlayer({
           draggable={false}
         />
 
-        {showFlightBall && (
-          <span className={`flight-ball flight-${agent.player}`} />
-        )}
-
         <span className="player-shadow" />
       </div>
     </div>
+  );
+}
+
+function CourtFlightBall({ player }: { player: "curry" | "kobe" }) {
+  const style = {
+    animationDuration: `${SHOT_DURATION_MS}ms`,
+  } as CSSProperties;
+
+  return (
+    <span
+      className={`court-flight-ball flight-${player}`}
+      style={style}
+      aria-hidden="true"
+    />
   );
 }
 
@@ -158,22 +245,25 @@ export function BasketballCourt({ agents }: { agents: CourtAgent[] }) {
 
   useEffect(() => {
     let cancelled = false;
-    let timeoutId: number;
+    let timeoutId: number | undefined;
 
-    const run = (currentPhase: number) => {
+    const schedulePhase = (currentPhase: number) => {
       timeoutId = window.setTimeout(() => {
         if (cancelled) return;
-        const next = (currentPhase + 1) % 4;
-        setPhase(next);
-        run(next);
+
+        const nextPhase = (currentPhase + 1) % 4;
+        setPhase(nextPhase);
+        schedulePhase(nextPhase);
       }, FRAME_DURATIONS[currentPhase]);
     };
 
-    run(0);
+    schedulePhase(0);
 
     return () => {
       cancelled = true;
-      window.clearTimeout(timeoutId);
+      if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId);
+      }
     };
   }, []);
 
@@ -181,6 +271,14 @@ export function BasketballCourt({ agents }: { agents: CourtAgent[] }) {
     () => agents.filter((agent) => agent.active).length,
     [agents]
   );
+
+  const curryIsShooting =
+    phase === 3 &&
+    agents.some((agent) => agent.player === "curry" && agent.active);
+
+  const kobeIsShooting =
+    phase === 3 &&
+    agents.some((agent) => agent.player === "kobe" && agent.active);
 
   return (
     <section className="court-panel">
@@ -208,9 +306,6 @@ export function BasketballCourt({ agents }: { agents: CourtAgent[] }) {
           <div className="arena-wall-line line-1" />
           <div className="arena-wall-line line-2" />
 
-          <Bench side="left" />
-          <Bench side="right" />
-
           <Hoop side="left" />
           <Hoop side="right" />
 
@@ -222,6 +317,9 @@ export function BasketballCourt({ agents }: { agents: CourtAgent[] }) {
           {agents.map((agent) => (
             <CourtPlayer key={agent.player} agent={agent} phase={phase} />
           ))}
+
+          {curryIsShooting && <CourtFlightBall player="curry" />}
+          {kobeIsShooting && <CourtFlightBall player="kobe" />}
         </div>
       </div>
 
@@ -229,7 +327,9 @@ export function BasketballCourt({ agents }: { agents: CourtAgent[] }) {
         {agents.map((agent) => (
           <article
             key={agent.player}
-            className={`court-agent-card ${agent.active ? "agent-active" : "agent-inactive"}`}
+            className={`court-agent-card ${
+              agent.active ? "agent-active" : "agent-inactive"
+            }`}
           >
             <div className="court-agent-top">
               <div className={`jersey-chip jersey-${agent.player}`}>
