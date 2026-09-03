@@ -32,3 +32,756 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 @media (max-width:1150px) { .dashboard-grid { grid-template-columns:1fr 1fr; }.dashboard-grid>.panel:not(.span-2) { grid-column:span 1; }.roster-grid { grid-template-columns:repeat(2,1fr); } }
 @media (max-width:820px) { .app-shell { display:block; }.sidebar { position:relative; width:100%; height:auto; padding:8px 12px; flex-direction:row; align-items:center; border-right:0; border-bottom:1px solid var(--line); }.brand-row,.roster-state,.sidebar-bottom,.main-nav p { display:none; }.main-nav { display:flex; width:100%; overflow-x:auto; }.main-nav a { flex:1; min-width:90px; justify-content:center; }.main-nav a.active { box-shadow:inset 0 -3px var(--blue); }.main-nav a.active i { display:none; }.topbar { position:relative; height:50px; padding:0 18px; }.mobile-brand { display:flex; }.command-key { display:none; }.content { padding:25px 18px 40px; }.stats-grid { grid-template-columns:repeat(2,1fr); }.dashboard-grid { display:block; }.dashboard-grid>.panel { margin-bottom:12px; }.agent-row { grid-template-columns:48px 1fr auto; }.agent-task,.agent-load { display:none; }.roster-grid { grid-template-columns:repeat(2,1fr); }.system-state { display:none; } }
 @media (max-width:560px) { .page-header { align-items:flex-start; }.page-header .primary-button { position:fixed; z-index:30; right:17px; bottom:17px; }.stats-grid,.roster-grid { grid-template-columns:1fr; }.table-head { display:none; }.table-row { grid-template-columns:1fr auto; padding:9px 0; }.table-row>span,.table-progress { display:none; }.log-row { grid-template-columns:56px 8px 1fr auto; }.log-row p,.log-row>button { display:none; }.main-nav a { font-size:0; min-width:56px; }.nav-icon { font-size:13px; }.top-actions button:first-child { display:none; } }
+/* =========================================================
+   AGENT BASKETBALL COURT — V3
+   ========================================================= */
+
+.court-panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.court-panel-header {
+  height: 66px;
+  padding: 0 18px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.court-panel-header h2 {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: -0.03em;
+}
+
+.court-live-state {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-geist-mono);
+}
+
+.court-live-state i {
+  width: 7px;
+  height: 7px;
+  background: var(--green);
+  box-shadow: 0 0 8px #47ce93;
+  animation: court-live-pulse 1.4s ease-in-out infinite;
+}
+
+.court-live-state strong {
+  color: var(--blue);
+  font-size: 13px;
+}
+
+.court-live-state span {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #8a8f9b;
+}
+
+@keyframes court-live-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.court-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+}
+
+.basketball-court {
+  position: relative;
+  min-width: 1100px;
+  height: 560px;
+  overflow: hidden;
+  background:
+    linear-gradient(to bottom, #f8f9fd 0%, #f4f6fb 74%, #eef1f7 100%);
+}
+
+.basketball-court::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(#e7ebf4 1px, transparent 1px),
+    linear-gradient(90deg, #e7ebf4 1px, transparent 1px);
+  background-size: 36px 36px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.arena-scoreboard {
+  position: absolute;
+  z-index: 4;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 126px;
+  height: 74px;
+  background: var(--navy);
+  border: 4px solid #fff;
+  outline: 1px solid #cfd4e3;
+  box-shadow: 4px 4px 0 #dfe3ef;
+  display: grid;
+  place-items: center;
+  padding: 7px;
+  color: #fff;
+  font-family: var(--font-geist-mono);
+}
+
+.arena-scoreboard span {
+  font-size: 7px;
+  color: #9cb0ff;
+  letter-spacing: 0.12em;
+}
+
+.arena-scoreboard strong {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.arena-scoreboard small {
+  font-size: 6px;
+  color: #7fe0b8;
+  letter-spacing: 0.12em;
+}
+
+.arena-wall-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #d6dce8;
+}
+
+.line-1 {
+  top: 202px;
+}
+
+.line-2 {
+  top: 304px;
+}
+
+/* benches farther away */
+
+.court-bench {
+  position: absolute;
+  z-index: 2;
+  top: 232px;
+  width: 180px;
+  height: 52px;
+  transform: scale(0.8);
+  opacity: 0.75;
+}
+
+.bench-left {
+  left: 22%;
+}
+
+.bench-right {
+  right: 22%;
+}
+
+.bench-back {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 0;
+  height: 12px;
+  background: #26356f;
+  border: 2px solid #18234e;
+}
+
+.bench-seat {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 16px;
+  height: 14px;
+  background: #18234e;
+  border: 2px solid #111b45;
+}
+
+.bench-leg {
+  position: absolute;
+  top: 28px;
+  width: 8px;
+  height: 22px;
+  background: #434b63;
+}
+
+.bench-leg.leg-1 {
+  left: 30px;
+}
+
+.bench-leg.leg-2 {
+  right: 30px;
+}
+
+/* hoops closer to paint */
+
+.court-hoop {
+  position: absolute;
+  z-index: 7;
+  top: 214px;
+  width: 130px;
+  height: 120px;
+}
+
+.hoop-left {
+  left: 62px;
+}
+
+.hoop-right {
+  right: 62px;
+}
+
+.hoop-post {
+  position: absolute;
+  bottom: 0;
+  width: 8px;
+  height: 98px;
+  background: #162150;
+}
+
+.hoop-left .hoop-post {
+  left: 0;
+}
+
+.hoop-right .hoop-post {
+  right: 0;
+}
+
+.hoop-arm {
+  position: absolute;
+  top: 48px;
+  width: 44px;
+  height: 8px;
+  background: #162150;
+}
+
+.hoop-left .hoop-arm {
+  left: 8px;
+}
+
+.hoop-right .hoop-arm {
+  right: 8px;
+}
+
+.hoop-backboard {
+  position: absolute;
+  top: 24px;
+  width: 12px;
+  height: 64px;
+  background: rgba(255,255,255,.94);
+  border: 3px solid #162150;
+}
+
+.hoop-left .hoop-backboard {
+  left: 52px;
+}
+
+.hoop-right .hoop-backboard {
+  right: 52px;
+}
+
+.hoop-rim {
+  position: absolute;
+  top: 76px;
+  width: 42px;
+  height: 6px;
+  border-radius: 4px;
+  background: #ea7a26;
+  box-shadow: 0 2px 0 #a94b14;
+}
+
+.hoop-left .hoop-rim {
+  left: 62px;
+}
+
+.hoop-right .hoop-rim {
+  right: 62px;
+}
+
+.hoop-net {
+  position: absolute;
+  top: 82px;
+  width: 28px;
+  height: 26px;
+  border-left: 2px solid rgba(120,120,130,.7);
+  border-right: 2px solid rgba(120,120,130,.7);
+  border-bottom: 2px solid rgba(120,120,130,.4);
+  background:
+    repeating-linear-gradient(
+      65deg,
+      transparent 0,
+      transparent 5px,
+      rgba(120,120,130,.23) 5px,
+      rgba(120,120,130,.23) 7px
+    );
+}
+
+.hoop-left .hoop-net {
+  left: 69px;
+}
+
+.hoop-right .hoop-net {
+  right: 69px;
+}
+
+/* court */
+
+.court-surface {
+  position: absolute;
+  z-index: 3;
+  left: 7%;
+  right: 7%;
+  bottom: 18px;
+  height: 228px;
+  clip-path: polygon(6% 0, 94% 0, 100% 100%, 0 100%);
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(112, 68, 23, 0.07) 0,
+      rgba(112, 68, 23, 0.07) 2px,
+      transparent 2px,
+      transparent 54px
+    ),
+    linear-gradient(to bottom, #e8b56f 0%, #de9f57 52%, #d18f49 100%);
+  border-top: 4px solid #b57336;
+  box-shadow:
+    inset 0 8px 0 rgba(255,255,255,.16),
+    inset 0 -12px 0 rgba(93,55,21,.06);
+}
+
+.surface-logo {
+  position: absolute;
+  left: 50%;
+  top: 103px;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,.9);
+  font: 800 16px var(--font-geist-mono);
+  z-index: 2;
+}
+
+.court-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.court-lines .line-main {
+  fill: none;
+  stroke: rgba(255,255,255,.86);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.court-lines .line-soft {
+  opacity: 0.65;
+}
+
+/* players */
+
+.court-player {
+  position: absolute;
+  z-index: 10;
+  width: 120px;
+  height: 200px;
+  transform-origin: center bottom;
+}
+
+.player-figure {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 110px;
+  height: 190px;
+  transform: translateX(-50%) scale(var(--player-scale));
+  transform-origin: center bottom;
+  overflow: visible;
+}
+
+.court-sprite {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  width: 96px;
+  height: auto;
+  transform: translateX(-50%);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  user-select: none;
+  pointer-events: none;
+  display: block;
+}
+
+.player-shadow {
+  position: absolute;
+  left: 28px;
+  bottom: 2px;
+  width: 50px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(12,18,40,.18);
+  filter: blur(1px);
+}
+
+.court-player-tag {
+  position: absolute;
+  z-index: 15;
+  left: 50%;
+  top: -26px;
+  transform: translateX(-50%) rotate(-2deg);
+  min-width: 96px;
+  padding: 5px 8px;
+  background: rgba(255,255,255,.95);
+  border: 1px solid #dbe0ea;
+  box-shadow: 2px 2px 0 rgba(218,223,236,.9);
+  text-align: center;
+}
+
+.court-player-tag strong {
+  display: block;
+  font-size: 8px;
+  line-height: 1.2;
+}
+
+.court-player-tag span {
+  display: block;
+  margin-top: 2px;
+  color: var(--blue);
+  font: 700 6px var(--font-geist-mono);
+  letter-spacing: 0.06em;
+}
+
+.is-inactive .court-player-tag span {
+  color: #8d92a0;
+}
+
+/* active bases */
+
+.is-active.player-curry {
+  left: 21%;
+  bottom: 130px;
+}
+
+.is-active.player-jordan {
+  left: 31%;
+  bottom: 132px;
+}
+
+.is-active.player-kobe {
+  left: 58%;
+  bottom: 132px;
+}
+
+.is-active.player-lebron {
+  left: 68%;
+  bottom: 132px;
+}
+
+/* frame-driven motion */
+
+.player-curry.phase-0 { transform: translate(0, 0); }
+.player-curry.phase-1 { transform: translate(4px, -4px); }
+.player-curry.phase-2 { transform: translate(8px, -18px); }
+.player-curry.phase-3 { transform: translate(8px, -6px); }
+
+.player-jordan.phase-0 { left: 31%; bottom: 132px; }
+.player-jordan.phase-1 { left: 27%; bottom: 132px; }
+.player-jordan.phase-2 { left: 21%; bottom: 136px; }
+.player-jordan.phase-3 { left: 13%; bottom: 178px; }
+
+.player-kobe.phase-0 { transform: translate(0, 0); }
+.player-kobe.phase-1 { transform: translate(-4px, -4px); }
+.player-kobe.phase-2 { transform: translate(-8px, -18px); }
+.player-kobe.phase-3 { transform: translate(-6px, -6px); }
+
+.player-lebron.phase-0 { left: 68%; bottom: 132px; }
+.player-lebron.phase-1 { left: 73%; bottom: 132px; }
+.player-lebron.phase-2 { left: 80%; bottom: 136px; }
+.player-lebron.phase-3 { left: 86%; bottom: 182px; }
+
+/* inactive */
+
+.is-inactive.player-curry {
+  left: 24%;
+  top: 198px;
+}
+
+.is-inactive.player-jordan {
+  left: 31%;
+  top: 198px;
+}
+
+.is-inactive.player-kobe {
+  left: 59%;
+  top: 198px;
+}
+
+.is-inactive.player-lebron {
+  left: 66%;
+  top: 198px;
+}
+
+.is-inactive .player-figure {
+  transform: translateX(-50%) scale(calc(var(--player-scale) * 0.76));
+}
+
+.is-inactive .player-shadow {
+  width: 42px;
+  opacity: 0.1;
+}
+
+/* balls */
+
+.held-ball,
+.flight-ball {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 44%,
+      #73320f 44%,
+      #73320f 53%,
+      transparent 53%
+    ),
+    #e97827;
+  border: 2px solid #75320d;
+  box-shadow: 1px 2px 0 rgba(69,31,8,.25);
+}
+
+.held-ball::after,
+.flight-ball::after {
+  content: "";
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  top: 5px;
+  height: 2px;
+  background: #73320f;
+  transform: rotate(-20deg);
+}
+
+.held-curry.phase-0 { left: 58px; top: 46px; }
+.held-curry.phase-1 { left: 60px; top: 38px; }
+.held-curry.phase-2 { left: 63px; top: 28px; }
+
+.held-kobe.phase-0 { left: 19px; top: 46px; }
+.held-kobe.phase-1 { left: 15px; top: 38px; }
+.held-kobe.phase-2 { left: 10px; top: 28px; }
+
+.held-jordan.phase-0 { left: 54px; top: 76px; }
+.held-jordan.phase-1 { left: 50px; top: 86px; }
+.held-jordan.phase-2 { left: 52px; top: 48px; }
+.held-jordan.phase-3 { left: 56px; top: 22px; }
+
+.held-lebron.phase-0 { left: 54px; top: 76px; }
+.held-lebron.phase-1 { left: 56px; top: 66px; }
+.held-lebron.phase-2 { left: 58px; top: 44px; }
+.held-lebron.phase-3 { left: 60px; top: 18px; }
+
+.flight-ball {
+  z-index: 20;
+}
+
+.flight-curry {
+  animation: curry-flight 720ms linear;
+}
+
+.flight-kobe {
+  animation: kobe-flight 720ms linear;
+}
+
+@keyframes curry-flight {
+  0%   { left: 29%; bottom: 270px; opacity: 1; }
+  40%  { left: 22%; bottom: 338px; opacity: 1; }
+  75%  { left: 15.2%; bottom: 308px; opacity: 1; }
+  100% { left: 12.5%; bottom: 288px; opacity: 0; }
+}
+
+@keyframes kobe-flight {
+  0%   { left: 67%; bottom: 270px; opacity: 1; }
+  40%  { left: 75%; bottom: 338px; opacity: 1; }
+  75%  { left: 82.6%; bottom: 308px; opacity: 1; }
+  100% { left: 85.8%; bottom: 288px; opacity: 0; }
+}
+
+/* agent strip */
+
+.court-agent-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--line);
+}
+
+.court-agent-card {
+  padding: 14px;
+  border-right: 1px solid var(--line);
+}
+
+.court-agent-card:last-child {
+  border-right: 0;
+}
+
+.court-agent-top {
+  display: grid;
+  grid-template-columns: 32px 1fr 7px;
+  gap: 8px;
+  align-items: center;
+}
+
+.jersey-chip {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  font: 800 9px var(--font-geist-mono);
+  border: 2px solid;
+}
+
+.jersey-curry {
+  background: #1d428a;
+  border-color: #ffc72c;
+  color: #fff;
+}
+
+.jersey-jordan {
+  background: #ce1141;
+  border-color: #111;
+  color: #fff;
+}
+
+.jersey-kobe {
+  background: #552583;
+  border-color: #fdb927;
+  color: #fff;
+}
+
+.jersey-lebron {
+  background: #fdb927;
+  border-color: #552583;
+  color: #552583;
+}
+
+.court-agent-meta strong {
+  display: block;
+  font-size: 10px;
+}
+
+.court-agent-meta span {
+  display: block;
+  margin-top: 2px;
+  color: #8c909b;
+  font-size: 8px;
+}
+
+.court-agent-status {
+  width: 7px;
+  height: 7px;
+  background: #aab0bc;
+}
+
+.agent-active .court-agent-status {
+  background: var(--green);
+  box-shadow: 0 0 6px #47ce93;
+}
+
+.court-agent-action {
+  margin-top: 12px;
+  display: grid;
+  gap: 3px;
+}
+
+.court-agent-action span {
+  color: #a1a5af;
+  font: 700 6px var(--font-geist-mono);
+  letter-spacing: 0.08em;
+}
+
+.court-agent-action strong {
+  font-size: 9px;
+}
+
+.agent-active .court-agent-action strong {
+  color: var(--blue);
+}
+
+.court-agent-info {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: #868b96;
+  font: 7px var(--font-geist-mono);
+}
+
+.court-agent-load {
+  height: 4px;
+  margin-top: 9px;
+  background: #e9ebf1;
+  overflow: hidden;
+}
+
+.court-agent-load span {
+  display: block;
+  height: 100%;
+  background: var(--blue);
+}
+
+.agent-inactive {
+  opacity: 0.68;
+}
+
+.agent-inactive .court-agent-load span {
+  background: #9da3ad;
+}
+
+@media (max-width: 1050px) {
+  .court-agent-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .court-agent-card:nth-child(2) {
+    border-right: 0;
+  }
+
+  .court-agent-card:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 620px) {
+  .court-agent-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .court-agent-card {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .court-agent-card:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .court-live-state i,
+  .flight-ball {
+    animation: none !important;
+  }
+}
