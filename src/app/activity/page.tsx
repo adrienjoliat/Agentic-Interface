@@ -2,7 +2,7 @@ import { Badge, PageHeader } from "@/components/ui";
 
 const events = [
   ["16:51:09", "Stephen Curry", "Completed", "Mission Control UI scaffold", "green"],
-  ["16:48:42", "System", "Connected", "Windows Node (ADRIEN)", "green"],
+  ["16:48:42", "System", "Connected", "Windows workstation", "green"],
   ["16:42:18", "Kobe Bryant", "Started", "Workflow runtime implementation", "blue"],
   ["16:31:04", "Michael Jordan", "Indexed", "12 research sources", "gray"],
   ["15:59:27", "LeBron James", "Paused", "QA review queue", "gray"],
