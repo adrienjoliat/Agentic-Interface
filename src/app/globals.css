@@ -609,7 +609,7 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
 }
 
 .is-inactive .player-figure {
-  transform: translateX(-50%) scale(calc(var(--player-scale) * 0.66));
+  transform: translateX(-50%) scale(calc(var(--player-scale) * 0.96));
 }
 
 .is-inactive .player-shadow {
@@ -922,4 +922,80 @@ button,a { font:inherit; } button { cursor:pointer; } a { color:inherit; text-de
   .court-flight-ball {
     animation: none !important;
   }
+}
+
+/* =========================================================
+   READABLE TYPOGRAPHY SCALE
+   Keep operational data legible on desktop and mobile without
+   changing the dashboard's compact visual language.
+   ========================================================= */
+
+body { font-size:16px; }
+.brand-row strong { font-size:18px; }
+.brand-row span:last-child { font-size:12px; }
+.roster-state strong,.main-nav p { font-size:11px; }
+.roster-state span:last-child { font-size:13px; }
+.main-nav a { min-height:44px; height:auto; font-size:15px; }
+.profile-button>span { font-size:12px; }
+.profile-button strong { font-size:14px; }
+.profile-button small,.version { font-size:11px; }
+.mobile-brand { font-size:14px; }
+.command-key { font-size:12px; }
+.system-state { font-size:11px; }
+.kicker { font-size:12px; }
+.page-header h1 { font-size:clamp(32px,3.4vw,46px); }
+.page-header>div>p:last-child { font-size:16px; line-height:1.5; }
+.primary-button,.secondary-button { font-size:14px; }
+.stat-top { font-size:13px; }
+.stat-card>strong { font-size:30px; }
+.stat-card>p { font-size:12px; line-height:1.45; }
+.panel-heading h2 { font-size:18px; }
+.panel-heading .kicker { font-size:11px; }
+.text-link { font-size:12px; }
+.agent-meta strong,.agent-task strong { font-size:14px; }
+.agent-meta span { font-size:13px; }
+.agent-task span,.agent-load>span { font-size:10px; }
+.badge { font-size:10px; padding:5px 7px; }
+.score-ring { font-size:16px; }
+.health-score strong { font-size:14px; }
+.health-score p { font-size:12px; }
+.health-row { min-height:44px; height:auto; font-size:13px; }
+.health-row strong { font-size:12px; }
+.table-head { font-size:10px; }
+.table-row,.table-row>strong { font-size:13px; }
+.table-progress small { font-size:11px; }
+.timeline-item strong { font-size:13px; }
+.timeline-item p { font-size:12px; line-height:1.4; }
+.timeline-item time { font-size:11px; }
+.live-empty,.board-empty,.live-refresh { font-size:11px; }
+.roster-title h2 { font-size:19px; }
+.roster-title p { font-size:13px; }
+.roster-stats span { font-size:10px; }
+.roster-stats strong { font-size:13px; }
+.roster-load>div,.roster-load strong { font-size:12px; }
+.column-head { min-height:38px; height:auto; font-size:11px; }
+.mission-card-top>span { font-size:12px; }
+.mission-card h3 { font-size:15px; }
+.mission-card p { font-size:12px; line-height:1.55; }
+.mission-card-foot>span { font-size:11px; }
+.filter-tabs button { font-size:13px; }
+.log-row,.log-row strong { font-size:13px; }
+.log-row time { font-size:12px; }
+.court-panel-header h2 { font-size:19px; }
+.court-live-state strong { font-size:16px; }
+.court-live-state span { font-size:11px; }
+.arena-scoreboard span { font-size:9px; }
+.arena-scoreboard small { font-size:8px; }
+.court-player-tag strong { font-size:11px; }
+.court-player-tag span { font-size:9px; }
+.jersey-chip { font-size:12px; }
+.court-agent-meta strong { font-size:14px; }
+.court-agent-meta span { font-size:11px; }
+.court-agent-action span { font-size:9px; }
+.court-agent-action strong { font-size:13px; }
+.court-agent-info { font-size:10px; }
+
+@media (max-width:560px) {
+  .main-nav a { font-size:0; }
+  .nav-icon { font-size:15px; }
 }

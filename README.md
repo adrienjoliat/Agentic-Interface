@@ -37,6 +37,7 @@ It does **not** expose transcripts, prompts, session keys, chat/user identifiers
 - Pixel basketball indicators and 8-bit navigation details
 - Generated pixel-art portraits for agent identities
 - Monospace telemetry and segmented progress bars
+- Large, readable typography for operational data across desktop and mobile
 - Responsive desktop and mobile layouts
 
 ## Run locally
