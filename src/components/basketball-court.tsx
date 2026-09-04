@@ -2,11 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
+import Image from "next/image";
 
 export type PlayerId = "curry" | "jordan" | "kobe" | "lebron";
 
 type SpriteFrames = {
-  active: [string, string, string, string];
+  active: readonly [string, string, string, string];
   bench: string;
 };
 
@@ -22,6 +23,10 @@ export type CourtAgent = {
   active: boolean;
   heightCm: number;
   frames: SpriteFrames;
+  configured?: boolean;
+  currentWork?: string;
+  heartbeat?: string;
+  sessions?: number;
 };
 
 const ACTION_LABELS: Record<PlayerId, string> = {
@@ -243,15 +248,18 @@ function CourtPlayer({
     >
       <div className="court-player-tag">
         <strong>{agent.name}</strong>
-        <span>{agent.active ? ACTION_LABELS[agent.player] : "ON BENCH"}</span>
+        <span>{agent.active ? "WORKING" : agent.configured ? "IDLE" : "ON BENCH"}</span>
       </div>
 
       <div className="player-figure">
-        <img
+        <Image
           src={spriteSrc}
           alt={agent.name}
           className="court-sprite"
           draggable={false}
+          width={96}
+          height={190}
+          unoptimized
         />
 
         <span className="player-shadow" />
@@ -382,16 +390,15 @@ export function BasketballCourt({ agents }: { agents: CourtAgent[] }) {
             <div className="court-agent-action">
               <span>{agent.active ? "NOW PLAYING" : "STATUS"}</span>
               <strong>
-                {agent.active
-                  ? ACTION_LABELS[agent.player]
-                  : "Waiting on bench"}
+                {agent.currentWork || (agent.active ? ACTION_LABELS[agent.player] : "Waiting on bench")}
               </strong>
             </div>
 
             <div className="court-agent-info">
               <span>{agent.model}</span>
-              <span>{agent.missions} missions</span>
-              <span>{agent.load}% load</span>
+              <span>{agent.missions} tasks</span>
+              <span>{agent.sessions ?? 0} sessions</span>
+              <span>{agent.heartbeat || "No heartbeat"}</span>
             </div>
 
             <div className="court-agent-load">

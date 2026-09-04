@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { DashboardShell } from "@/components/dashboard-shell";
+import { OpenClawProvider } from "@/components/openclaw-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,7 +25,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body><DashboardShell>{children}</DashboardShell></body>
+      <body><OpenClawProvider><DashboardShell>{children}</DashboardShell></OpenClawProvider></body>
     </html>
   );
 }

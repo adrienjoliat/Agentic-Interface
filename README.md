@@ -10,14 +10,25 @@ A local-first dashboard for orchestrating AI agents, designed as a clean operati
 
 This project explores an agentic software-development workflow: the product brief, visual system, generated pixel-art assets, implementation, verification, and iterative refinement are developed in collaboration with an AI agent running locally through OpenClaw and the OpenAI Codex runtime.
 
-The goal is to evolve the static interface into a live control plane for agents, missions, runtime health, memory, logs, and model usage.
+The interface is connected to the local OpenClaw runtime and refreshes its sanitized operational snapshot every five seconds.
 
 ## Current screens
 
-- **Overview** — roster status, mission metrics, health, and recent activity
-- **Agents** — basketball-player-inspired agent roster and runtime assignments
-- **Missions** — Kanban-style task pipeline
-- **Activity** — timestamped agent and system telemetry
+- **Overview** — live roster status, task metrics, runtime health, and recent activity
+- **Agents** — configured agents work on court; unconfigured roster slots remain on the bench
+- **Missions** — live OpenClaw task pipeline
+- **Activity** — sanitized session and task signals
+
+## OpenClaw integration
+
+The server-only `/api/openclaw` route reads the local CLI and returns a deliberately limited payload:
+
+- configured agent identity, model, role, heartbeat, and aggregate session counts
+- current working/idle state derived from task and trajectory activity
+- task titles, owners, states, priorities, and progress
+- gateway reachability, latency, runtime version, and aggregate token usage
+
+It does **not** expose transcripts, prompts, session keys, chat/user identifiers, filesystem paths, gateway addresses, credentials, or raw OpenClaw JSON. The route rejects non-local hostnames. A public deployment without a local OpenClaw runtime therefore shows an offline state rather than personal telemetry.
 
 ## Visual system
 
@@ -37,6 +48,8 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+OpenClaw must be installed and available as `openclaw` on the server process PATH. The four-player roster maps configured agents by basketball identity and keeps unused slots visibly inactive.
+
 ## Quality checks
 
 ```bash
@@ -46,10 +59,9 @@ npm run build
 
 ## Roadmap
 
-- Connect dashboard metrics to live OpenClaw state
 - Add mission creation and execution controls
-- Stream task and agent logs
-- Surface model, token, and cost telemetry
+- Add opt-in drill-down views for task logs
+- Add cost telemetry
 - Add persistent mission and agent configuration
 - Add screenshots and architecture documentation
 
